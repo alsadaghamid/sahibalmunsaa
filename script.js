@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
 
         // Submit the form to Formspree
-        fetch('https://formspree.io/f/alsadaghamid@gmail.com', {
+        fetch('https://formspree.io/f/antsahibalmnusaa@gmail.com', {
             method: 'POST',
             body: new FormData(form),
             headers: {
