@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const links = document.querySelectorAll('.link-button');
     links.forEach(link => {
         link.addEventListener('click', function() {
-            alert('فتح ' + this.textContent + ' في تبويب جديد.');
+            // Links open directly without fake alert
         });
     });
 
