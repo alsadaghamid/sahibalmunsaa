@@ -1,11 +1,52 @@
+:root {
+    --bg-color: #f4f4f4;
+    --text-color: #333;
+    --header-bg: #007bff;
+    --header-color: white;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     direction: rtl;
     text-align: right;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --header-bg: #1f1f1f;
+    --header-color: #e0e0e0;
+}
+
+.dark-mode header {
+    background-color: var(--header-bg);
+    color: var(--header-color);
+}
+
+.dark-mode section {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.dark-mode fieldset {
+    background-color: #1e1e1e;
+    color: var(--text-color);
+    border-color: #444;
+}
+
+.dark-mode input, .dark-mode textarea {
+    background-color: #2d2d2d;
+    color: var(--text-color);
+    border-color: #444;
+}
+
+.dark-mode .navbar {
+    background-color: var(--header-bg) !important;
 }
 
 header {
@@ -36,6 +77,13 @@ fieldset {
     margin: 20px 0;
     border-radius: 8px;
     background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+fieldset legend {
+    font-weight: bold;
+    color: #007bff;
+    padding: 0 10px;
 }
 
 label {
@@ -45,11 +93,28 @@ label {
 
 input, textarea {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-top: -5px;
+    margin-bottom: 10px;
+    display: block;
 }
 
 button {
@@ -121,6 +186,11 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @media (max-width: 768px) {

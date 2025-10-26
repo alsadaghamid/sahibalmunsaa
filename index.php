@@ -1,12 +1,56 @@
+<?php
+session_start();
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أنت صاحب المنصة</title>
+    <meta name="description" content="منصة لإدارة مجتمعك وتطوير مهاراتك في السودان">
+    <meta name="keywords" content="منصة, مجتمع, تطوير, سودان">
+    <meta name="author" content="أنت صاحب المنصة">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "أنت صاحب المنصة",
+      "description": "منصة لإدارة مجتمعك وتطوير مهاراتك في السودان",
+      "url": "https://sahibalmunsaa.com",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+249-119484931",
+        "contactType": "customer service"
+      }
+    }
+    </script>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">أنت صاحب المنصة</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">الرئيسية</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin.php">لوحة الإدارة</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <header>
         <h1>أنت صاحب المنصة</h1>
         <p>مرحباً بك في موقع إدارة منصتك.</p>
@@ -31,28 +75,35 @@
     <section id="form">
         <h2>استمارة العضوية</h2>
         <form id="membership-form" action="submit.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <fieldset>
                 <legend>المعلومات الشخصية</legend>
                 <label for="name">الاسم الكامل:</label>
-                <input type="text" id="name" name="name" required><br>
+                <input type="text" id="name" name="name" required aria-describedby="name-help"><br>
+                <small id="name-help" class="form-text text-muted">أدخل اسمك الكامل</small>
 
                 <label for="age">العمر:</label>
-                <input type="number" id="age" name="age" required><br>
+                <input type="number" id="age" name="age" required aria-describedby="age-help"><br>
+                <small id="age-help" class="form-text text-muted">أدخل عمرك بالسنوات</small>
 
                 <label>الجنس:</label>
-                <input type="radio" id="male" name="gender" value="ذكر" required>
+                <input type="radio" id="male" name="gender" value="ذكر" required aria-describedby="gender-help">
                 <label for="male">ذكر</label>
                 <input type="radio" id="female" name="gender" value="أنثى" required>
                 <label for="female">أنثى</label><br>
+                <small id="gender-help" class="form-text text-muted">اختر جنسك</small>
 
                 <label for="city">المدينة / القرية:</label>
-                <input type="text" id="city" name="city" required><br>
+                <input type="text" id="city" name="city" required aria-describedby="city-help"><br>
+                <small id="city-help" class="form-text text-muted">أدخل مدينتك أو قريتك</small>
 
                 <label for="phone">رقم الهاتف / واتساب:</label>
-                <input type="tel" id="phone" name="phone" required><br>
+                <input type="tel" id="phone" name="phone" required aria-describedby="phone-help"><br>
+                <small id="phone-help" class="form-text text-muted">أدخل رقم هاتفك</small>
 
                 <label for="email">البريد الإلكتروني (اختياري):</label>
-                <input type="email" id="email" name="email"><br>
+                <input type="email" id="email" name="email" aria-describedby="email-help"><br>
+                <small id="email-help" class="form-text text-muted">أدخل بريدك الإلكتروني إذا أردت</small>
             </fieldset>
 
             <fieldset>
@@ -112,6 +163,10 @@
                 <label for="commit-no">أحتاج توضيح أكثر</label><br>
             </fieldset>
 
+            <div id="loading-spinner" style="display: none; text-align: center; margin: 20px;">
+                <div style="border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <p>جاري الإرسال...</p>
+            </div>
             <button type="submit">انضم الآن</button>
         </form>
     </section>
@@ -126,6 +181,26 @@
         <p>&copy; 2023 أنت صاحب المنصة. جميع الحقوق محفوظة.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Dark mode toggle
+        const darkModeToggle = document.createElement('button');
+        darkModeToggle.innerHTML = '🌙';
+        darkModeToggle.className = 'btn btn-outline-secondary position-fixed';
+        darkModeToggle.style.cssText = 'top: 10px; left: 10px; z-index: 1000;';
+        darkModeToggle.onclick = function() {
+            document.body.classList.toggle('dark-mode');
+            this.innerHTML = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        };
+        document.body.appendChild(darkModeToggle);
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '☀️';
+        }
+    </script>
 </body>
 </html>
